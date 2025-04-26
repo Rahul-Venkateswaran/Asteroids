@@ -11,9 +11,10 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+#include "GUIContainer.h"
 
 Asteroids::Asteroids(int argc, char* argv[])
-    : GameSession(argc, argv), mIsStartScreen(true) // Initialize mIsStartScreen
+    : GameSession(argc, argv), mIsStartScreen(true)
 {
     mLevel = 0;
     mAsteroidCount = 0;
@@ -46,15 +47,26 @@ void Asteroids::Start()
         mGameWorld->AddObject(CreateSpaceship());
     }
 
-    CreateAsteroids(5);
+    CreateAsteroids(10);
     CreateGUI();
 
-    // Hide GUI elements for start screen
+    // Set visibility for start screen
     if (mIsStartScreen)
     {
         mScoreLabel->SetVisible(false);
         mLivesLabel->SetVisible(false);
         mGameOverLabel->SetVisible(false);
+        mStartGameLabel->SetVisible(true);
+        mDifficultyLabel->SetVisible(true);
+        mInstructionsLabel->SetVisible(true);
+        mHighScoresLabel->SetVisible(true);
+    }
+    else
+    {
+        mStartGameLabel->SetVisible(false);
+        mDifficultyLabel->SetVisible(false);
+        mInstructionsLabel->SetVisible(false);
+        mHighScoresLabel->SetVisible(false);
     }
 
     mGameWorld->AddListener(&mPlayer);
@@ -178,10 +190,40 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 void Asteroids::CreateGUI()
 {
     mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
+
+    // Create menu labels directly in game display
+    mStartGameLabel = make_shared<GUILabel>("Start Game");
+    mStartGameLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mStartGameLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mStartGameLabel->SetVisible(mIsStartScreen);
+    shared_ptr<GUIComponent> start_game_component = static_pointer_cast<GUIComponent>(mStartGameLabel);
+    mGameDisplay->GetContainer()->AddComponent(start_game_component, GLVector2f(0.5f, 0.65f));
+
+    mDifficultyLabel = make_shared<GUILabel>("Difficulty");
+    mDifficultyLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mDifficultyLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mDifficultyLabel->SetVisible(mIsStartScreen);
+    shared_ptr<GUIComponent> difficulty_component = static_pointer_cast<GUIComponent>(mDifficultyLabel);
+    mGameDisplay->GetContainer()->AddComponent(difficulty_component, GLVector2f(0.5f, 0.55f));
+
+    mInstructionsLabel = make_shared<GUILabel>("Instructions");
+    mInstructionsLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mInstructionsLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mInstructionsLabel->SetVisible(mIsStartScreen);
+    shared_ptr<GUIComponent> instructions_component = static_pointer_cast<GUIComponent>(mInstructionsLabel);
+    mGameDisplay->GetContainer()->AddComponent(instructions_component, GLVector2f(0.5f, 0.45f));
+
+    mHighScoresLabel = make_shared<GUILabel>("High Scores");
+    mHighScoresLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mHighScoresLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mHighScoresLabel->SetVisible(mIsStartScreen);
+    shared_ptr<GUIComponent> high_scores_component = static_pointer_cast<GUIComponent>(mHighScoresLabel);
+    mGameDisplay->GetContainer()->AddComponent(high_scores_component, GLVector2f(0.5f, 0.35f));
+
+    // Create other GUI elements
     mScoreLabel = make_shared<GUILabel>("Score: 0");
     mScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
-    shared_ptr<GUIComponent> score_component
-        = static_pointer_cast<GUIComponent>(mScoreLabel);
+    shared_ptr<GUIComponent> score_component = static_pointer_cast<GUIComponent>(mScoreLabel);
     mGameDisplay->GetContainer()->AddComponent(score_component, GLVector2f(0.0f, 1.0f));
 
     mLivesLabel = make_shared<GUILabel>("Lives: 3");
@@ -193,8 +235,7 @@ void Asteroids::CreateGUI()
     mGameOverLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
     mGameOverLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mGameOverLabel->SetVisible(false);
-    shared_ptr<GUIComponent> game_over_component
-        = static_pointer_cast<GUIComponent>(mGameOverLabel);
+    shared_ptr<GUIComponent> game_over_component = static_pointer_cast<GUIComponent>(mGameOverLabel);
     mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 }
 

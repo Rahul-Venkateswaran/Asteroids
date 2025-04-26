@@ -3,6 +3,7 @@
 
 #include "GameUtil.h"
 #include "GameSession.h"
+#include "GUIContainer.h"
 #include "IKeyboardListener.h"
 #include "IGameWorldListener.h"
 #include "IScoreListener.h" 
@@ -52,6 +53,12 @@ private:
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
+
+	shared_ptr<GUIContainer> mMenuContainer;
+	shared_ptr<GUILabel> mStartGameLabel;
+	shared_ptr<GUILabel> mDifficultyLabel;
+	shared_ptr<GUILabel> mInstructionsLabel;
+	shared_ptr<GUILabel> mHighScoresLabel;
 
 	uint mLevel;
 	uint mAsteroidCount;
