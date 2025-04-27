@@ -3,13 +3,13 @@
 
 #include "GameUtil.h"
 #include "GameSession.h"
-#include "GUIContainer.h"
 #include "IKeyboardListener.h"
 #include "IGameWorldListener.h"
 #include "IScoreListener.h" 
 #include "ScoreKeeper.h"
 #include "Player.h"
 #include "IPlayerListener.h"
+#include "GUIContainer.h"
 
 class GameObject;
 class Spaceship;
@@ -53,22 +53,15 @@ private:
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
-
-	shared_ptr<GUIContainer> mMenuContainer;
-	shared_ptr<GUILabel> mStartGameLabel;
-	shared_ptr<GUILabel> mDifficultyLabel;
-	shared_ptr<GUILabel> mInstructionsLabel;
-	shared_ptr<GUILabel> mHighScoresLabel;
-
+	shared_ptr<GUIContainer> mMenuContainer; // Add this for the menu
+	shared_ptr<GUILabel> mStartGameLabel;   // Optional: for easy access
+	shared_ptr<GUILabel> mDifficultyLabel;  // Optional
+	shared_ptr<GUILabel> mInstructionsLabel; // Optional
+	shared_ptr<GUILabel> mHighScoresLabel;  // Optional
 	uint mLevel;
 	uint mAsteroidCount;
 	bool mIsStartScreen;
 	int mSelectedMenuOption;
-
-	shared_ptr<GameObject> CreateSpaceship();
-	void CreateAsteroids(const uint num_asteroids);
-	void CreateGUI();
-	shared_ptr<GameObject> CreateExplosion();
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
@@ -76,6 +69,11 @@ private:
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
+
+	shared_ptr<GameObject> CreateSpaceship();
+	void CreateAsteroids(const uint num_asteroids);
+	void CreateGUI();
+	shared_ptr<GameObject> CreateExplosion();
 
 	void UpdateMenuDisplay(); // Add this to update menu text
 	void StartGame();

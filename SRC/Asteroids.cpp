@@ -232,7 +232,8 @@ void Asteroids::CreateGUI()
 {
     mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
 
-    mStartGameLabel = make_shared<GUILabel>("> Start Game");
+    // Create menu labels directly in game display
+    mStartGameLabel = make_shared<GUILabel>("> Start Game"); // Initial selection
     mStartGameLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
     mStartGameLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mStartGameLabel->SetVisible(mIsStartScreen);
