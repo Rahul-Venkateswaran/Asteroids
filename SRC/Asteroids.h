@@ -62,6 +62,7 @@ private:
 	uint mAsteroidCount;
 	bool mIsStartScreen;
 	int mSelectedMenuOption;
+	bool mEnablePowerups;
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;

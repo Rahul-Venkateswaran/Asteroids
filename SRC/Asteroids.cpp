@@ -14,7 +14,7 @@
 #include "GUIContainer.h"
 
 Asteroids::Asteroids(int argc, char* argv[])
-    : GameSession(argc, argv), mIsStartScreen(true), mSelectedMenuOption(0) // Initialize to "Start Game"
+    : GameSession(argc, argv), mIsStartScreen(true), mSelectedMenuOption(0), mEnablePowerups(false) // Initialize powerups to On
 {
     mLevel = 0;
     mAsteroidCount = 0;
@@ -92,7 +92,9 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
             case 0: // Start Game
                 StartGame();
                 break;
-            case 1: // Difficulty (placeholder)
+            case 1: // Difficult Mode
+                mEnablePowerups = !mEnablePowerups; // Toggle powerups
+                UpdateMenuDisplay(); // Update display to show On/Off
                 break;
             case 2: // Instructions (placeholder)
                 break;
@@ -240,7 +242,7 @@ void Asteroids::CreateGUI()
     shared_ptr<GUIComponent> start_game_component = static_pointer_cast<GUIComponent>(mStartGameLabel);
     mGameDisplay->GetContainer()->AddComponent(start_game_component, GLVector2f(0.5f, 0.65f));
 
-    mDifficultyLabel = make_shared<GUILabel>("Difficulty");
+    mDifficultyLabel = make_shared<GUILabel>("Difficult Mode: Off"); // Initial state
     mDifficultyLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
     mDifficultyLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mDifficultyLabel->SetVisible(mIsStartScreen);
@@ -325,7 +327,7 @@ shared_ptr<GameObject> Asteroids::CreateExplosion()
 void Asteroids::UpdateMenuDisplay()
 {
     mStartGameLabel->SetText(mSelectedMenuOption == 0 ? "> Start Game" : "Start Game");
-    mDifficultyLabel->SetText(mSelectedMenuOption == 1 ? "> Difficulty" : "Difficulty");
+    mDifficultyLabel->SetText(mSelectedMenuOption == 1 ? (mEnablePowerups ? "> Difficult Mode: On" : "> Difficult Mode: Off") : (mEnablePowerups ? "Difficult Mode: On" : "Difficult Mode: Off"));
     mInstructionsLabel->SetText(mSelectedMenuOption == 2 ? "> Instructions" : "Instructions");
     mHighScoresLabel->SetText(mSelectedMenuOption == 3 ? "> High Scores" : "High Scores");
 }
