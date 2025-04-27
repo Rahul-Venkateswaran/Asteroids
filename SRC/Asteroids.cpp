@@ -64,6 +64,7 @@ void Asteroids::Start()
         mDifficultyLabel->SetVisible(!mShowingInstructions && !mShowingHighScores && !mEnteringName);
         mInstructionsLabel->SetVisible(!mShowingInstructions && !mShowingHighScores && !mEnteringName);
         mHighScoresLabel->SetVisible(!mShowingInstructions && !mShowingHighScores && !mEnteringName);
+        mTitleLabel->SetVisible(!mShowingInstructions && !mShowingHighScores && !mEnteringName);
         mInstructionsThrust->SetVisible(mShowingInstructions);
         mInstructionsDirection->SetVisible(mShowingInstructions);
         mInstructionsShoot->SetVisible(mShowingInstructions);
@@ -71,6 +72,7 @@ void Asteroids::Start()
         mInstructionsExit->SetVisible(mShowingInstructions);
         for (int i = 0; i < 5; ++i)
             mHighScoreLabels[i]->SetVisible(mShowingHighScores);
+        mHighScoreExitLabel->SetVisible(mShowingHighScores);
         mNameInputLabel->SetVisible(mEnteringName);
         UpdateMenuDisplay();
     }
@@ -80,6 +82,7 @@ void Asteroids::Start()
         mDifficultyLabel->SetVisible(false);
         mInstructionsLabel->SetVisible(false);
         mHighScoresLabel->SetVisible(false);
+        mTitleLabel->SetVisible(false);
         mInstructionsThrust->SetVisible(false);
         mInstructionsDirection->SetVisible(false);
         mInstructionsShoot->SetVisible(false);
@@ -87,6 +90,7 @@ void Asteroids::Start()
         mInstructionsExit->SetVisible(false);
         for (int i = 0; i < 5; ++i)
             mHighScoreLabels[i]->SetVisible(false);
+        mHighScoreExitLabel->SetVisible(false);
         mNameInputLabel->SetVisible(false);
     }
 
@@ -107,7 +111,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
     {
         if (mEnteringName)
         {
-            if (key == 13)
+            if (key == 13) // Enter key
             {
                 if (!mCurrentName.empty())
                 {
@@ -120,18 +124,19 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
                     mDifficultyLabel->SetVisible(true);
                     mInstructionsLabel->SetVisible(true);
                     mHighScoresLabel->SetVisible(true);
+                    mTitleLabel->SetVisible(true);
                     UpdateMenuDisplay();
                 }
             }
-            else if (key == 8 && !mCurrentName.empty())
+            else if (key == 8 && !mCurrentName.empty()) // Backspace
             {
                 mCurrentName.pop_back();
-                mNameInputLabel->SetText("Username: " + mCurrentName);
+                mNameInputLabel->SetText("Enter Name: " + mCurrentName);
             }
-            else if (mCurrentName.length() < 12 && ((key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9')))
+            else if (mCurrentName.length() < 8 && ((key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9')))
             {
                 mCurrentName += key;
-                mNameInputLabel->SetText("Username: " + mCurrentName);
+                mNameInputLabel->SetText("Enter Name: " + mCurrentName);
             }
         }
         else if (mShowingHighScores)
@@ -143,8 +148,10 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
                 mDifficultyLabel->SetVisible(true);
                 mInstructionsLabel->SetVisible(true);
                 mHighScoresLabel->SetVisible(true);
+                mTitleLabel->SetVisible(true);
                 for (int i = 0; i < 5; ++i)
                     mHighScoreLabels[i]->SetVisible(false);
+                mHighScoreExitLabel->SetVisible(false);
                 UpdateMenuDisplay();
             }
         }
@@ -157,6 +164,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
                 mDifficultyLabel->SetVisible(true);
                 mInstructionsLabel->SetVisible(true);
                 mHighScoresLabel->SetVisible(true);
+                mTitleLabel->SetVisible(true);
                 mInstructionsThrust->SetVisible(false);
                 mInstructionsDirection->SetVisible(false);
                 mInstructionsShoot->SetVisible(false);
@@ -184,6 +192,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
                     mDifficultyLabel->SetVisible(false);
                     mInstructionsLabel->SetVisible(false);
                     mHighScoresLabel->SetVisible(false);
+                    mTitleLabel->SetVisible(false);
                     mInstructionsThrust->SetVisible(true);
                     mInstructionsDirection->SetVisible(true);
                     mInstructionsShoot->SetVisible(true);
@@ -196,9 +205,11 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
                     mDifficultyLabel->SetVisible(false);
                     mInstructionsLabel->SetVisible(false);
                     mHighScoresLabel->SetVisible(false);
+                    mTitleLabel->SetVisible(false);
                     UpdateHighScoreDisplay();
                     for (int i = 0; i < 5; ++i)
                         mHighScoreLabels[i]->SetVisible(true);
+                    mHighScoreExitLabel->SetVisible(true);
                     break;
                 }
             }
@@ -369,6 +380,13 @@ void Asteroids::CreateGUI()
     shared_ptr<GUIComponent> high_scores_component = static_pointer_cast<GUIComponent>(mHighScoresLabel);
     mGameDisplay->GetContainer()->AddComponent(high_scores_component, GLVector2f(0.5f, 0.35f));
 
+    mTitleLabel = make_shared<GUILabel>("ASTEROIDS", GUILabel::FONT_HELVETICA_18);
+    mTitleLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mTitleLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mTitleLabel->SetVisible(mIsStartScreen && !mShowingInstructions && !mShowingHighScores && !mEnteringName);
+    shared_ptr<GUIComponent> title_component = static_pointer_cast<GUIComponent>(mTitleLabel);
+    mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.5f, 0.85f));
+
     mInstructionsThrust = make_shared<GUILabel>("Controls: UP to thrust");
     mInstructionsThrust->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
     mInstructionsThrust->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
@@ -413,6 +431,13 @@ void Asteroids::CreateGUI()
         shared_ptr<GUIComponent> high_score_component = static_pointer_cast<GUIComponent>(mHighScoreLabels[i]);
         mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.65f - i * 0.1f));
     }
+
+    mHighScoreExitLabel = make_shared<GUILabel>("Press SPACE to return.");
+    mHighScoreExitLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+    mHighScoreExitLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+    mHighScoreExitLabel->SetVisible(mShowingHighScores);
+    shared_ptr<GUIComponent> high_score_exit_component = static_pointer_cast<GUIComponent>(mHighScoreExitLabel);
+    mGameDisplay->GetContainer()->AddComponent(high_score_exit_component, GLVector2f(0.5f, 0.15f));
 
     mNameInputLabel = make_shared<GUILabel>("Enter Name: ");
     mNameInputLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
@@ -550,6 +575,7 @@ void Asteroids::StartGame()
     mDifficultyLabel->SetVisible(false);
     mInstructionsLabel->SetVisible(false);
     mHighScoresLabel->SetVisible(false);
+    mTitleLabel->SetVisible(false);
     mInstructionsThrust->SetVisible(false);
     mInstructionsDirection->SetVisible(false);
     mInstructionsShoot->SetVisible(false);
@@ -557,6 +583,7 @@ void Asteroids::StartGame()
     mInstructionsExit->SetVisible(false);
     for (int i = 0; i < 5; ++i)
         mHighScoreLabels[i]->SetVisible(false);
+    mHighScoreExitLabel->SetVisible(false);
     mNameInputLabel->SetVisible(false);
     mScoreLabel->SetVisible(true);
     mLivesLabel->SetVisible(true);

@@ -64,6 +64,8 @@ private:
 	shared_ptr<GUILabel> mInstructionsShoot;
 	shared_ptr<GUILabel> mInstructionsGoal;
 	shared_ptr<GUILabel> mInstructionsExit;
+	shared_ptr<GUILabel> mHighScoreExitLabel;
+	shared_ptr<GUILabel> mTitleLabel;
 	shared_ptr<GUILabel> mHighScoreLabels[5];
 	shared_ptr<GUILabel> mNameInputLabel;
 	uint mLevel;
