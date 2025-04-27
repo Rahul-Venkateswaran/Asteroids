@@ -15,6 +15,7 @@ private:
 	uint mTextureID;
 	uint mImageWidth;
 	uint mImageHeight;
+
 };
 
 #endif
