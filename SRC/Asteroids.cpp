@@ -15,8 +15,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <cstdlib>
-#include <ctime>
 
 Asteroids::Asteroids(int argc, char* argv[])
     : GameSession(argc, argv), mIsStartScreen(true), mSelectedMenuOption(0), mEnablePowerups(false),
@@ -25,7 +23,6 @@ Asteroids::Asteroids(int argc, char* argv[])
     mLevel = 0;
     mAsteroidCount = 0;
     LoadHighScores();
-    srand(time(0)); // Seed random number generator
 }
 
 Asteroids::~Asteroids(void)
@@ -49,12 +46,10 @@ void Asteroids::Start()
     Animation* explosion_anim = AnimationManager::GetInstance().CreateAnimationFromFile("explosion", 64, 1024, 64, 64, "explosion_fs.png");
     Animation* asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
     Animation* spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
-    Animation* heart_anim = AnimationManager::GetInstance().CreateAnimationFromFile("heart", 128,128,128,128, "heart.png");
 
     if (!mIsStartScreen)
     {
         mGameWorld->AddObject(CreateSpaceship());
-        mGameWorld->AddObject(CreateExtraLife()); // Spawn one heart
     }
 
     CreateAsteroids(10);
@@ -353,28 +348,6 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
     }
 }
 
-shared_ptr<GameObject> Asteroids::CreateExplosion()
-{
-    Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("explosion");
-    shared_ptr<Sprite> explosion_sprite =
-        make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-    explosion_sprite->SetLoopAnimation(false);
-    shared_ptr<GameObject> explosion = make_shared<Explosion>();
-    explosion->SetSprite(explosion_sprite);
-    explosion->Reset();
-    return explosion;
-}
-
-shared_ptr<GameObject> Asteroids::CreateExtraLife()
-{
-    shared_ptr<ExtraLife> extraLife = make_shared<ExtraLife>();
-    float x = (rand() % 100 - 50) * 1.0f; // Random x in [-50, 50]
-    float y = (rand() % 100 - 50) * 1.0f; // Random y in [-50, 50]
-    extraLife->SetPosition(GLVector3f(x, y, 0.0f));
-    mExtraLives.push_back(extraLife);
-    return extraLife;
-}
-
 void Asteroids::CreateGUI()
 {
     mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
@@ -575,6 +548,18 @@ void Asteroids::OnPlayerKilled(int lives_left)
     }
 }
 
+shared_ptr<GameObject> Asteroids::CreateExplosion()
+{
+    Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("explosion");
+    shared_ptr<Sprite> explosion_sprite =
+        make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+    explosion_sprite->SetLoopAnimation(false);
+    shared_ptr<GameObject> explosion = make_shared<Explosion>();
+    explosion->SetSprite(explosion_sprite);
+    explosion->Reset();
+    return explosion;
+}
+
 void Asteroids::UpdateMenuDisplay()
 {
     mStartGameLabel->SetText(mSelectedMenuOption == 0 ? "> Start Game" : "Start Game");
@@ -603,5 +588,4 @@ void Asteroids::StartGame()
     mScoreLabel->SetVisible(true);
     mLivesLabel->SetVisible(true);
     mGameWorld->AddObject(CreateSpaceship());
-    mGameWorld->AddObject(CreateExtraLife()); // Spawn one heart at game start
 }

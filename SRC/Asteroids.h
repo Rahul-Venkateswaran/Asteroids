@@ -12,7 +12,6 @@
 #include "GUIContainer.h"
 #include <vector>
 #include <string>
-#include "ExtraLife.h"
 
 class GameObject;
 class Spaceship;
@@ -72,19 +71,16 @@ private:
     std::string mCurrentName;
     std::vector<std::pair<std::string, int>> mHighScores;
 
-
     const static uint SHOW_GAME_OVER = 0;
     const static uint START_NEXT_LEVEL = 1;
     const static uint CREATE_NEW_PLAYER = 2;
 
     ScoreKeeper mScoreKeeper;
     Player mPlayer;
-    std::vector<shared_ptr<ExtraLife>> mExtraLives;
 
     shared_ptr<GameObject> CreateSpaceship();
     void CreateAsteroids(const uint num_asteroids);
     void CreateGUI();
-    shared_ptr<GameObject> CreateExtraLife();
     shared_ptr<GameObject> CreateExplosion();
     void UpdateMenuDisplay();
     void StartGame();
