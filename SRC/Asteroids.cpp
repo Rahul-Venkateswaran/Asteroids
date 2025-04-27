@@ -14,7 +14,7 @@
 #include "GUIContainer.h"
 
 Asteroids::Asteroids(int argc, char* argv[])
-    : GameSession(argc, argv), mIsStartScreen(true)
+    : GameSession(argc, argv), mIsStartScreen(true), mSelectedMenuOption(0) // Initialize to "Start Game"
 {
     mLevel = 0;
     mAsteroidCount = 0;
@@ -60,6 +60,7 @@ void Asteroids::Start()
         mDifficultyLabel->SetVisible(true);
         mInstructionsLabel->SetVisible(true);
         mHighScoresLabel->SetVisible(true);
+        UpdateMenuDisplay(); // Initialize menu highlight
     }
     else
     {
@@ -82,13 +83,34 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-    switch (key)
+    if (mIsStartScreen)
     {
-    case ' ':
-        mSpaceship->Shoot();
-        break;
-    default:
-        break;
+        if (key == ' ') // Spacebar to confirm selection
+        {
+            switch (mSelectedMenuOption)
+            {
+            case 0: // Start Game
+                StartGame();
+                break;
+            case 1: // Difficulty (placeholder)
+                break;
+            case 2: // Instructions (placeholder)
+                break;
+            case 3: // High Scores (placeholder)
+                break;
+            }
+        }
+    }
+    else
+    {
+        switch (key)
+        {
+        case ' ':
+            mSpaceship->Shoot();
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -96,23 +118,42 @@ void Asteroids::OnKeyReleased(uchar key, int x, int y) {}
 
 void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 {
-    switch (key)
+    if (mIsStartScreen)
     {
-    case GLUT_KEY_UP: mSpaceship->Thrust(10); break;
-    case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
-    case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
-    default: break;
+        if (key == GLUT_KEY_UP)
+        {
+            mSelectedMenuOption = (mSelectedMenuOption - 1 + 4) % 4; // Move up, wrap around
+            UpdateMenuDisplay();
+        }
+        else if (key == GLUT_KEY_DOWN)
+        {
+            mSelectedMenuOption = (mSelectedMenuOption + 1) % 4; // Move down, wrap around
+            UpdateMenuDisplay();
+        }
+    }
+    else
+    {
+        switch (key)
+        {
+        case GLUT_KEY_UP: mSpaceship->Thrust(10); break;
+        case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
+        case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
+        default: break;
+        }
     }
 }
 
 void Asteroids::OnSpecialKeyReleased(int key, int x, int y)
 {
-    switch (key)
+    if (!mIsStartScreen)
     {
-    case GLUT_KEY_UP: mSpaceship->Thrust(0); break;
-    case GLUT_KEY_LEFT: mSpaceship->Rotate(0); break;
-    case GLUT_KEY_RIGHT: mSpaceship->Rotate(0); break;
-    default: break;
+        switch (key)
+        {
+        case GLUT_KEY_UP: mSpaceship->Thrust(0); break;
+        case GLUT_KEY_LEFT: mSpaceship->Rotate(0); break;
+        case GLUT_KEY_RIGHT: mSpaceship->Rotate(0); break;
+        default: break;
+        }
     }
 }
 
@@ -191,8 +232,7 @@ void Asteroids::CreateGUI()
 {
     mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
 
-    // Create menu labels directly in game display
-    mStartGameLabel = make_shared<GUILabel>("Start Game");
+    mStartGameLabel = make_shared<GUILabel>("> Start Game");
     mStartGameLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
     mStartGameLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mStartGameLabel->SetVisible(mIsStartScreen);
@@ -279,4 +319,24 @@ shared_ptr<GameObject> Asteroids::CreateExplosion()
     explosion->SetSprite(explosion_sprite);
     explosion->Reset();
     return explosion;
+}
+
+void Asteroids::UpdateMenuDisplay()
+{
+    mStartGameLabel->SetText(mSelectedMenuOption == 0 ? "> Start Game" : "Start Game");
+    mDifficultyLabel->SetText(mSelectedMenuOption == 1 ? "> Difficulty" : "Difficulty");
+    mInstructionsLabel->SetText(mSelectedMenuOption == 2 ? "> Instructions" : "Instructions");
+    mHighScoresLabel->SetText(mSelectedMenuOption == 3 ? "> High Scores" : "High Scores");
+}
+
+void Asteroids::StartGame()
+{
+    mIsStartScreen = false;
+    mStartGameLabel->SetVisible(false);
+    mDifficultyLabel->SetVisible(false);
+    mInstructionsLabel->SetVisible(false);
+    mHighScoresLabel->SetVisible(false);
+    mScoreLabel->SetVisible(true);
+    mLivesLabel->SetVisible(true);
+    mGameWorld->AddObject(CreateSpaceship());
 }

@@ -63,11 +63,11 @@ private:
 	uint mLevel;
 	uint mAsteroidCount;
 	bool mIsStartScreen;
+	int mSelectedMenuOption;
 
-	void ResetSpaceship();
 	shared_ptr<GameObject> CreateSpaceship();
-	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
+	void CreateGUI();
 	shared_ptr<GameObject> CreateExplosion();
 
 	const static uint SHOW_GAME_OVER = 0;
@@ -76,6 +76,9 @@ private:
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
+
+	void UpdateMenuDisplay(); // Add this to update menu text
+	void StartGame();
 };
 
 #endif
