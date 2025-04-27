@@ -12,7 +12,7 @@ GUILabel::GUILabel() : mText(""), mFont(FONT_9_BY_15), mFontWidth(9), mFontHeigh
 GUILabel::GUILabel(const string& text, FontType font) : mText(text), mFont(font)
 {
     if (font == FONT_HELVETICA_18) {
-        mFontWidth = 18; // Approximate width for Helvetica 18
+        mFontWidth = 14; // Adjusted for better centering
         mFontHeight = 18;
         mGlutFont = GLUT_BITMAP_HELVETICA_18;
     }
