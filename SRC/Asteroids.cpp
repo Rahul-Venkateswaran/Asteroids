@@ -385,7 +385,7 @@ void Asteroids::CreateGUI()
     mTitleLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mTitleLabel->SetVisible(mIsStartScreen && !mShowingInstructions && !mShowingHighScores && !mEnteringName);
     shared_ptr<GUIComponent> title_component = static_pointer_cast<GUIComponent>(mTitleLabel);
-    mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.52f, 0.85f));
+    mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.5f, 0.85f));
 
     mInstructionsThrust = make_shared<GUILabel>("Controls: UP to thrust");
     mInstructionsThrust->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);

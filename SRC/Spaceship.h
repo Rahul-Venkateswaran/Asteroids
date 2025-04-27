@@ -25,7 +25,7 @@ public:
 	void SetBulletShape(shared_ptr<Shape> bullet_shape) { mBulletShape = bullet_shape; }
 
 	bool CollisionTest(shared_ptr<GameObject> o);
-	void OnCollision(const GameObjectList &objects);
+	void OnCollision(const GameObjectList& objects);
 
 private:
 	float mThrust;

@@ -12,6 +12,7 @@
 #include "GUIContainer.h"
 #include <vector>
 #include <string>
+#include "ExtraLife.h"
 
 class GameObject;
 class Spaceship;
