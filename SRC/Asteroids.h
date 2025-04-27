@@ -53,16 +53,22 @@ private:
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
-	shared_ptr<GUIContainer> mMenuContainer; // Add this for the menu
-	shared_ptr<GUILabel> mStartGameLabel;   // Optional: for easy access
-	shared_ptr<GUILabel> mDifficultyLabel;  // Optional
-	shared_ptr<GUILabel> mInstructionsLabel; // Optional
-	shared_ptr<GUILabel> mHighScoresLabel;  // Optional
+	shared_ptr<GUIContainer> mMenuContainer;
+	shared_ptr<GUILabel> mStartGameLabel;
+	shared_ptr<GUILabel> mDifficultyLabel;
+	shared_ptr<GUILabel> mInstructionsLabel;
+	shared_ptr<GUILabel> mHighScoresLabel;
+	shared_ptr<GUILabel> mInstructionsThrust;
+	shared_ptr<GUILabel> mInstructionsDirection;
+	shared_ptr<GUILabel> mInstructionsShoot;
+	shared_ptr<GUILabel> mInstructionsGoal;
+	shared_ptr<GUILabel> mInstructionsExit;
 	uint mLevel;
 	uint mAsteroidCount;
 	bool mIsStartScreen;
 	int mSelectedMenuOption;
 	bool mEnablePowerups;
+	bool mShowingInstructions;
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
