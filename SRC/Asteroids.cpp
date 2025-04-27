@@ -385,7 +385,7 @@ void Asteroids::CreateGUI()
     mTitleLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mTitleLabel->SetVisible(mIsStartScreen && !mShowingInstructions && !mShowingHighScores && !mEnteringName);
     shared_ptr<GUIComponent> title_component = static_pointer_cast<GUIComponent>(mTitleLabel);
-    mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.5f, 0.85f));
+    mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.52f, 0.85f));
 
     mInstructionsThrust = make_shared<GUILabel>("Controls: UP to thrust");
     mInstructionsThrust->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
@@ -429,7 +429,7 @@ void Asteroids::CreateGUI()
         mHighScoreLabels[i]->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
         mHighScoreLabels[i]->SetVisible(mShowingHighScores);
         shared_ptr<GUIComponent> high_score_component = static_pointer_cast<GUIComponent>(mHighScoreLabels[i]);
-        mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.75f - i * 0.1f));
+        mGameDisplay->GetContainer()->AddComponent(high_score_component, GLVector2f(0.5f, 0.85f - i * 0.1f));
     }
 
     mHighScoreExitLabel = make_shared<GUILabel>("Press SPACE to return.");
@@ -437,7 +437,7 @@ void Asteroids::CreateGUI()
     mHighScoreExitLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
     mHighScoreExitLabel->SetVisible(mShowingHighScores);
     shared_ptr<GUIComponent> high_score_exit_component = static_pointer_cast<GUIComponent>(mHighScoreExitLabel);
-    mGameDisplay->GetContainer()->AddComponent(high_score_exit_component, GLVector2f(0.5f, 0.25f));
+    mGameDisplay->GetContainer()->AddComponent(high_score_exit_component, GLVector2f(0.5f, 0.35f));
 
     mNameInputLabel = make_shared<GUILabel>("Enter Name: ");
     mNameInputLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
