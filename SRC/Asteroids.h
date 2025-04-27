@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "IPlayerListener.h"
 #include "GUIContainer.h"
+#include <vector>
 
 class GameObject;
 class Spaceship;
@@ -63,12 +64,19 @@ private:
 	shared_ptr<GUILabel> mInstructionsShoot;
 	shared_ptr<GUILabel> mInstructionsGoal;
 	shared_ptr<GUILabel> mInstructionsExit;
+	shared_ptr<GUILabel> mHighScoreLabels[5];
+	shared_ptr<GUILabel> mNameInputLabel;
 	uint mLevel;
 	uint mAsteroidCount;
 	bool mIsStartScreen;
 	int mSelectedMenuOption;
 	bool mEnablePowerups;
 	bool mShowingInstructions;
+
+	bool mShowingHighScores;
+	bool mEnteringName;
+	std::string mCurrentName;
+	std::vector<std::pair<std::string, int>> mHighScores;
 
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
@@ -84,6 +92,11 @@ private:
 
 	void UpdateMenuDisplay(); // Add this to update menu text
 	void StartGame();
+
+	void LoadHighScores();
+	void SaveHighScores();
+	void UpdateHighScoreDisplay();
+	void AddHighScore(const std::string& name, int score);
 };
 
 #endif
